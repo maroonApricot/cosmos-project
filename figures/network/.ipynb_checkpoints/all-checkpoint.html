@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 600px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "black", "id": "ENSMUSG00000065396", "label": "ENSMUSG00000065396", "shape": "dot", "title": "ENSMUSG00000065396\ngene_name: Mir99b\ngo_id: miRNA"}, {"color": "darkgrey", "id": "ENSMUSG00000065400", "label": "ENSMUSG00000065400", "shape": "dot", "title": "ENSMUSG00000065400\ngene_name: Mir200a\ngo_id: miRNA"}, {"color": "darkgrey", "id": "ENSMUSG00000065403", "label": "ENSMUSG00000065403", "shape": "dot", "title": "ENSMUSG00000065403\ngene_name: Mir18\ngo_id: miRNA"}, {"color": "darkgrey", "id": "ENSMUSG00000065417", "label": "ENSMUSG00000065417", "shape": "dot", "title": "ENSMUSG00000065417\ngene_name: Mir340\ngo_id: miRNA"}, {"color": "darkgrey", "id": "ENSMUSG00000065425", "label": "ENSMUSG00000065425", "shape": "dot", "title": "ENSMUSG00000065425\ngene_name: Mir325\ngo_id: miRNA"}, {"color": "darkgrey", "id": "ENSMUSG00000065427", "label": "ENSMUSG00000065427", "shape": "dot", "title": "ENSMUSG00000065427\ngene_name: Mir429\ngo_id: miRNA"}, {"color": "black", "id": "ENSMUSG00000065429", "label": "ENSMUSG00000065429", "shape": "dot", "title": "ENSMUSG00000065429\ngene_name: Mir345\ngo_id: miRNA"}, {"color": "darkgrey", "id": "ENSMUSG00000065474", "label": "ENSMUSG00000065474", "shape": "dot", "title": "ENSMUSG00000065474\ngene_name: Mir141\ngo_id: miRNA"}, {"color": "black", "id": "ENSMUSG00000065479", "label": "ENSMUSG00000065479", "shape": "dot", "title": "ENSMUSG00000065479\ngene_name: Mir125a\ngo_id: miRNA"}, {"color": "darkgrey", "id": "ENSMUSG00000065549", "label": "ENSMUSG00000065549", "shape": "dot", "title": "ENSMUSG00000065549\ngene_name: Mir200b\ngo_id: miRNA"}, {"color": "black", "id": "ENSMUSG00000065560", "label": "ENSMUSG00000065560", "shape": "dot", "title": "ENSMUSG00000065560\ngene_name: Mir148b\ngo_id: miRNA"}, {"color": "black", "id": "ENSMUSG00000065587", "label": "ENSMUSG00000065587", "shape": "dot", "title": "ENSMUSG00000065587\ngene_name: Mir34c\ngo_id: miRNA"}, {"color": "silver", "id": "ENSMUSG00000065593", "label": "ENSMUSG00000065593", "shape": "dot", "title": "ENSMUSG00000065593\ngene_name: Mir339\ngo_id: miRNA"}, {"color": "black", "id": "ENSMUSG00000065612", "label": "ENSMUSG00000065612", "shape": "dot", "title": "ENSMUSG00000065612\ngene_name: Mir151\ngo_id: miRNA"}, {"color": "darkgrey", "id": "ENSMUSG00000065616", "label": "ENSMUSG00000065616", "shape": "dot", "title": "ENSMUSG00000065616\ngene_name: Mir375\ngo_id: miRNA"}, {"color": "silver", "id": "ENSMUSG00000070100", "label": "ENSMUSG00000070100", "shape": "dot", "title": "ENSMUSG00000070100\ngene_name: Mir362\ngo_id: miRNA"}, {"color": "silver", "id": "ENSMUSG00000070130", "label": "ENSMUSG00000070130", "shape": "dot", "title": "ENSMUSG00000070130\ngene_name: Mir328\ngo_id: miRNA"}, {"color": "silver", "id": "ENSMUSG00000070139", "label": "ENSMUSG00000070139", "shape": "dot", "title": "ENSMUSG00000070139\ngene_name: Mir532\ngo_id: miRNA"}, {"color": "black", "id": "ENSMUSG00000076010", "label": "ENSMUSG00000076010", "shape": "dot", "title": "ENSMUSG00000076010\ngene_name: Mir615\ngo_id: miRNA"}, {"color": "black", "id": "ENSMUSG00000076060", "label": "ENSMUSG00000076060", "shape": "dot", "title": "ENSMUSG00000076060\ngene_name: Mir704\ngo_id: miRNA"}, {"color": "darkgrey", "id": "ENSMUSG00000076959", "label": "ENSMUSG00000076959", "shape": "dot", "title": "ENSMUSG00000076959\ngene_name: Mir669l\ngo_id: miRNA"}, {"color": "darkgrey", "id": "ENSMUSG00000077086", "label": "ENSMUSG00000077086", "shape": "dot", "title": "ENSMUSG00000077086\ngene_name: Mir669o\ngo_id: miRNA"}, {"color": "silver", "id": "ENSMUSG00000088373", "label": "ENSMUSG00000088373", "shape": "dot", "title": "ENSMUSG00000088373\ngene_name: Mir1956\ngo_id: miRNA"}, {"color": "black", "id": "ENSMUSG00000092781", "label": "ENSMUSG00000092781", "shape": "dot", "title": "ENSMUSG00000092781\ngene_name: Mir3057\ngo_id: miRNA"}, {"color": "silver", "id": "ENSMUSG00000096628", "label": "ENSMUSG00000096628", "shape": "dot", "title": "ENSMUSG00000096628"}, {"color": "silver", "id": "ENSMUSG00000098280", "label": "ENSMUSG00000098280", "shape": "dot", "title": "ENSMUSG00000098280\ngene_name: Mir7687\ngo_id: miRNA"}, {"color": "silver", "id": "ENSMUSG00000098341", "label": "ENSMUSG00000098341", "shape": "dot", "title": "ENSMUSG00000098341\ngene_name: Mir6944\ngo_id: miRNA"}, {"color": "silver", "id": "ENSMUSG00000098431", "label": "ENSMUSG00000098431", "shape": "dot", "title": "ENSMUSG00000098431\ngene_name: Mir7666\ngo_id: miRNA"}, {"color": "black", "id": "ENSMUSG00000098451", "label": "ENSMUSG00000098451", "shape": "dot", "title": "ENSMUSG00000098451\ngene_name: Mir6952\ngo_id: miRNA"}, {"color": "silver", "id": "ENSMUSG00000099031", "label": "ENSMUSG00000099031", "shape": "dot", "title": "ENSMUSG00000099031\ngene_name: Mir7240\ngo_id: miRNA"}]);
+                  edges = new vis.DataSet([{"from": "ENSMUSG00000065474", "to": "ENSMUSG00000065427", "weight": 0.49685110096895113}, {"from": "ENSMUSG00000065474", "to": "ENSMUSG00000065616", "weight": 0.49632557348669637}, {"from": "ENSMUSG00000065425", "to": "ENSMUSG00000065427", "weight": 0.494060234566272}, {"from": "ENSMUSG00000065474", "to": "ENSMUSG00000065549", "weight": 0.4937980804988373}, {"from": "ENSMUSG00000065427", "to": "ENSMUSG00000065616", "weight": 0.4933274119072195}, {"from": "ENSMUSG00000065549", "to": "ENSMUSG00000065616", "weight": 0.4928018210483746}, {"from": "ENSMUSG00000065474", "to": "ENSMUSG00000065425", "weight": 0.4913732252103986}, {"from": "ENSMUSG00000065474", "to": "ENSMUSG00000065400", "weight": 0.49121780439787166}, {"from": "ENSMUSG00000065425", "to": "ENSMUSG00000065400", "weight": 0.4898654967742595}, {"from": "ENSMUSG00000065427", "to": "ENSMUSG00000065549", "weight": 0.488254633107435}, {"from": "ENSMUSG00000065549", "to": "ENSMUSG00000065403", "weight": 0.4820860733082166}, {"from": "ENSMUSG00000065400", "to": "ENSMUSG00000065549", "weight": 0.47879793746996596}, {"from": "ENSMUSG00000065425", "to": "ENSMUSG00000065403", "weight": 0.4774692802814727}, {"from": "ENSMUSG00000065400", "to": "ENSMUSG00000065616", "weight": 0.4773575248348332}, {"from": "ENSMUSG00000065425", "to": "ENSMUSG00000065616", "weight": 0.46904985944164534}, {"from": "ENSMUSG00000065400", "to": "ENSMUSG00000065403", "weight": 0.4671573362340844}, {"from": "ENSMUSG00000065427", "to": "ENSMUSG00000065403", "weight": 0.4621330312596025}, {"from": "ENSMUSG00000065403", "to": "ENSMUSG00000065616", "weight": 0.44766449322608126}, {"from": "ENSMUSG00000065417", "to": "ENSMUSG00000065403", "weight": 0.4341840826414421}, {"from": "ENSMUSG00000070130", "to": "ENSMUSG00000070100", "weight": 0.4267171232271473}, {"from": "ENSMUSG00000070100", "to": "ENSMUSG00000070139", "weight": 0.4231939955010385}, {"from": "ENSMUSG00000099031", "to": "ENSMUSG00000070130", "weight": 0.4225780783659907}, {"from": "ENSMUSG00000070130", "to": "ENSMUSG00000070139", "weight": 0.4209087431445075}, {"from": "ENSMUSG00000099031", "to": "ENSMUSG00000070139", "weight": 0.4196662679324518}, {"from": "ENSMUSG00000088373", "to": "ENSMUSG00000070130", "weight": 0.41660153273164796}, {"from": "ENSMUSG00000088373", "to": "ENSMUSG00000070139", "weight": 0.40831728453755406}, {"from": "ENSMUSG00000099031", "to": "ENSMUSG00000070100", "weight": 0.4035470463817068}, {"from": "ENSMUSG00000088373", "to": "ENSMUSG00000070100", "weight": 0.40243959355392694}, {"from": "ENSMUSG00000065417", "to": "ENSMUSG00000065549", "weight": 0.394544101510399}, {"from": "ENSMUSG00000099031", "to": "ENSMUSG00000088373", "weight": 0.39268368346490673}, {"from": "ENSMUSG00000076959", "to": "ENSMUSG00000065403", "weight": 0.3874419447789329}, {"from": "ENSMUSG00000065417", "to": "ENSMUSG00000076959", "weight": 0.38728700663113447}, {"from": "ENSMUSG00000065417", "to": "ENSMUSG00000065474", "weight": 0.384089950834015}, {"from": "ENSMUSG00000065417", "to": "ENSMUSG00000077086", "weight": 0.38368673716812307}, {"from": "ENSMUSG00000076959", "to": "ENSMUSG00000065474", "weight": 0.38316829471395847}, {"from": "ENSMUSG00000065417", "to": "ENSMUSG00000065425", "weight": 0.37774825503202625}, {"from": "ENSMUSG00000065560", "to": "ENSMUSG00000076060", "weight": 0.37760140563890243}, {"from": "ENSMUSG00000065417", "to": "ENSMUSG00000065400", "weight": 0.37598174062524303}, {"from": "ENSMUSG00000076959", "to": "ENSMUSG00000065427", "weight": 0.37578876901251773}, {"from": "ENSMUSG00000076959", "to": "ENSMUSG00000065549", "weight": 0.37553907113123886}, {"from": "ENSMUSG00000076959", "to": "ENSMUSG00000065400", "weight": 0.3743862806263137}, {"from": "ENSMUSG00000070130", "to": "ENSMUSG00000065593", "weight": 0.3743387690488397}, {"from": "ENSMUSG00000065417", "to": "ENSMUSG00000065427", "weight": 0.3733893640720801}, {"from": "ENSMUSG00000076959", "to": "ENSMUSG00000065425", "weight": 0.3720048642129334}, {"from": "ENSMUSG00000070130", "to": "ENSMUSG00000096628", "weight": 0.36846007313214457}, {"from": "ENSMUSG00000065593", "to": "ENSMUSG00000070139", "weight": 0.36488084618930094}, {"from": "ENSMUSG00000098341", "to": "ENSMUSG00000070130", "weight": 0.3605653788569882}, {"from": "ENSMUSG00000065474", "to": "ENSMUSG00000077086", "weight": 0.36016007078598294}, {"from": "ENSMUSG00000065549", "to": "ENSMUSG00000077086", "weight": 0.3598483227186956}, {"from": "ENSMUSG00000076959", "to": "ENSMUSG00000065616", "weight": 0.3565419561500704}, {"from": "ENSMUSG00000098341", "to": "ENSMUSG00000070139", "weight": 0.3520293717599181}, {"from": "ENSMUSG00000065403", "to": "ENSMUSG00000077086", "weight": 0.3513959512819585}, {"from": "ENSMUSG00000096628", "to": "ENSMUSG00000070139", "weight": 0.35009349432225956}, {"from": "ENSMUSG00000077086", "to": "ENSMUSG00000065616", "weight": 0.3493936370935315}, {"from": "ENSMUSG00000065429", "to": "ENSMUSG00000092781", "weight": 0.34526247384947956}, {"from": "ENSMUSG00000098341", "to": "ENSMUSG00000070100", "weight": 0.34369854974324193}, {"from": "ENSMUSG00000065427", "to": "ENSMUSG00000077086", "weight": 0.3432813216630016}, {"from": "ENSMUSG00000070130", "to": "ENSMUSG00000098280", "weight": 0.34275074526770616}, {"from": "ENSMUSG00000070100", "to": "ENSMUSG00000065593", "weight": 0.3426562623330652}, {"from": "ENSMUSG00000088373", "to": "ENSMUSG00000096628", "weight": 0.34069909738062376}, {"from": "ENSMUSG00000065479", "to": "ENSMUSG00000076060", "weight": 0.3391522181357827}, {"from": "ENSMUSG00000098341", "to": "ENSMUSG00000099031", "weight": 0.33692703263271945}, {"from": "ENSMUSG00000099031", "to": "ENSMUSG00000096628", "weight": 0.3360015393326819}, {"from": "ENSMUSG00000065587", "to": "ENSMUSG00000065560", "weight": 0.3354570226978755}, {"from": "ENSMUSG00000065479", "to": "ENSMUSG00000065560", "weight": 0.3346672585904613}, {"from": "ENSMUSG00000065425", "to": "ENSMUSG00000077086", "weight": 0.33461490262724336}, {"from": "ENSMUSG00000065400", "to": "ENSMUSG00000077086", "weight": 0.3344765054285378}, {"from": "ENSMUSG00000098341", "to": "ENSMUSG00000065593", "weight": 0.33379269463107686}, {"from": "ENSMUSG00000070100", "to": "ENSMUSG00000096628", "weight": 0.33341771983511426}, {"from": "ENSMUSG00000070130", "to": "ENSMUSG00000098431", "weight": 0.32706369875646896}, {"from": "ENSMUSG00000099031", "to": "ENSMUSG00000065593", "weight": 0.3249109586966375}, {"from": "ENSMUSG00000065479", "to": "ENSMUSG00000098451", "weight": 0.32399922715003665}, {"from": "ENSMUSG00000065593", "to": "ENSMUSG00000098280", "weight": 0.32398370582902575}, {"from": "ENSMUSG00000065587", "to": "ENSMUSG00000065612", "weight": 0.32341927070932347}, {"from": "ENSMUSG00000070139", "to": "ENSMUSG00000098280", "weight": 0.3176881160789703}, {"from": "ENSMUSG00000065612", "to": "ENSMUSG00000065396", "weight": 0.3173014479273888}, {"from": "ENSMUSG00000070100", "to": "ENSMUSG00000098280", "weight": 0.31005650813390234}, {"from": "ENSMUSG00000098451", "to": "ENSMUSG00000065560", "weight": 0.3079956753428995}, {"from": "ENSMUSG00000098341", "to": "ENSMUSG00000088373", "weight": 0.30604154135816636}, {"from": "ENSMUSG00000088373", "to": "ENSMUSG00000065593", "weight": 0.30230903641959517}, {"from": "ENSMUSG00000065587", "to": "ENSMUSG00000076060", "weight": 0.30097634435035286}, {"from": "ENSMUSG00000098431", "to": "ENSMUSG00000070139", "weight": 0.30012907091298946}, {"from": "ENSMUSG00000065593", "to": "ENSMUSG00000098431", "weight": 0.29891281661076746}, {"from": "ENSMUSG00000065612", "to": "ENSMUSG00000065560", "weight": 0.29340010655844095}, {"from": "ENSMUSG00000065587", "to": "ENSMUSG00000065479", "weight": 0.28909906410054226}, {"from": "ENSMUSG00000070100", "to": "ENSMUSG00000098431", "weight": 0.2839611501335646}, {"from": "ENSMUSG00000099031", "to": "ENSMUSG00000098280", "weight": 0.27452895939008093}, {"from": "ENSMUSG00000065593", "to": "ENSMUSG00000096628", "weight": 0.2732886166317987}, {"from": "ENSMUSG00000065612", "to": "ENSMUSG00000076060", "weight": 0.2700501225210229}, {"from": "ENSMUSG00000098431", "to": "ENSMUSG00000098280", "weight": 0.26524572679527697}, {"from": "ENSMUSG00000076010", "to": "ENSMUSG00000065479", "weight": 0.26389552251739534}, {"from": "ENSMUSG00000099031", "to": "ENSMUSG00000098431", "weight": 0.2592456319192946}, {"from": "ENSMUSG00000065612", "to": "ENSMUSG00000065479", "weight": 0.24887841664755453}, {"from": "ENSMUSG00000076010", "to": "ENSMUSG00000092781", "weight": 0.24825527993765029}, {"from": "ENSMUSG00000088373", "to": "ENSMUSG00000098280", "weight": 0.247192732571014}, {"from": "ENSMUSG00000065587", "to": "ENSMUSG00000098451", "weight": 0.24553254849743303}, {"from": "ENSMUSG00000065612", "to": "ENSMUSG00000098451", "weight": 0.2425322983306183}, {"from": "ENSMUSG00000098451", "to": "ENSMUSG00000076060", "weight": 0.2407031882165587}, {"from": "ENSMUSG00000076010", "to": "ENSMUSG00000065560", "weight": 0.2390058912212527}, {"from": "ENSMUSG00000088373", "to": "ENSMUSG00000098431", "weight": 0.23619416593168183}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
